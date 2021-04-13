@@ -12,18 +12,18 @@ output_dir <- args[2] # "./results/figures/"
 
 # Container to store results
 output <- list(); i <- 1
-for( ar in c("", " AR30", " AR20") ){
-    df <- read.csv(file.path(data_dir, paste0("mask wearing cov eff", ar, ".csv")), header = TRUE)
-    df$severity <- ar
+for( ar in c(11, 30, 20) ){
+    df <- read.csv(file.path(data_dir, paste0("mask wearing cov eff AR", ar, ".csv")), 
+        header = TRUE)
+    df$severity <- paste0("Proportion infected ", ar, "%")
     df$RR_AR <- 100 - 100*with(df, AR/max(AR))
-    
+
     output[[i]] <- df; i <- i + 1
 }
-df_all <- do.call(rbind, output)
-df_ar <- df_all[,-which(colnames(df_all) == "mortality")]
+df_ar <- do.call(rbind, output)
 
-# Set zeros to be displayed as white
-df_ar$RR_AR[df_ar$RR_AR == 0] <- NA
+# In case you want to set zeros to be displayed as white
+#df_ar$RR_AR[df_ar$RR_AR == 0] <- NA
 
 # Generate plot
 p <- ggplot(df_ar, aes(x = Coverage, y = Efficacy, fill = RR_AR)) + 
@@ -34,8 +34,8 @@ p <- ggplot(df_ar, aes(x = Coverage, y = Efficacy, fill = RR_AR)) +
     scale_fill_distiller(name = "Reduction\nin cases (%)", 
         palette = "Reds", limits = c(0, 50), direction = 1,# YlOrRd
         breaks = seq(0, 50, by = 10), na.value = "white") + 
-    scale_x_continuous(expand = c(0, 0), limits = c(0, 105)) + 
-    scale_y_continuous(expand = c(0, 0), limits = c(5, 35)) + 
+    scale_x_continuous(expand = c(0, 0), limits = c(-5, 105), breaks = seq(0, 100, 10)) + 
+    scale_y_continuous(expand = c(0, 0), limits = c(2.5, 37.5), breaks = seq(5, 35, 5)) + 
     facet_grid(cols = vars(severity)) + 
     theme(
         strip.background = element_blank(),
@@ -48,7 +48,7 @@ p <- ggplot(df_ar, aes(x = Coverage, y = Efficacy, fill = RR_AR)) +
         axis.title.y = element_text(size = 16),
         legend.text = element_text(size = 14),
         legend.title = element_text(size = 16)
-        )
+        ) + theme(panel.spacing = unit(1, "lines"))
 
 # Save plot to disk
 ggsave(file.path(output_dir, "mask_efficacy_coverage.png"), p, width = 12, height = 4)
