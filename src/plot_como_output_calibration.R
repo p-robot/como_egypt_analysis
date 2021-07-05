@@ -66,7 +66,6 @@ p1 <- ggplot(df_all, aes(x = date, y = pred_rep_cases))  +
           panel.background = element_blank(),
           legend.text = element_text(size = 12), 
           axis.line = element_line(colour = "black"), 
-          legend.position = "top", 
           plot.title = element_text(hjust = 0.5, size = 12, face = "bold")) +
     ylim(0, ymax) + 
     scale_colour_manual(name = "", values = color_values) + 
@@ -92,7 +91,7 @@ df_all$pred_cum_mort <- rowSums(df_all[, death_cols])
 
 
 p2 <- ggplot(df_all, aes(x = date, y = pred_cum_mort)) + 
-    geom_line(aes(colour=attack_rate), show.legend = F,size = 1.2) + 
+    geom_line(aes(colour=attack_rate), show.legend = T, size = 1.2) + 
     geom_point(aes(x = date, y = obs_cum_mort), colour = "red", show.legend = F, alpha = 0.6) +
     labs(x = "", y = "Cumulative mortality") + 
     theme(
@@ -105,16 +104,16 @@ p2 <- ggplot(df_all, aes(x = date, y = pred_cum_mort)) +
           panel.grid.minor = element_blank(),
           panel.background = element_blank(),
           legend.text = element_text(size = 12), 
+          legend.position = "top", 
           axis.line = element_line(colour = "black"), 
           plot.title = element_text(hjust = 0.5, size = 12, face = "bold")) +
     ylim(0, ymax) + 
     scale_colour_manual(name = "", values = color_values) + 
-    scale_x_date(breaks = "1 month", date_labels = "%b", limits = c(start_date, end_date))
+    scale_x_date(breaks = "1 month", date_labels = "%b %Y", limits = c(start_date, end_date))
 
-
-  # Arrange all figures in one plot
-p_all <- grid.arrange(p1, p2, nrow = 2)
+# Arrange all figures in one plot
+#p_all <- grid.arrange(p1, p2, nrow = 2)
 
 # Save composite figure to file
 ggsave(file.path(output_dir, "calibration_daily_cases_mortality.pdf"), 
-    plot = p_all, device = "pdf", width = 8, height = 8)
+    plot = p2, device = "pdf", width = 8, height = 6)
