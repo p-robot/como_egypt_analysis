@@ -1,7 +1,6 @@
 #!/usr/bin/env Rscript
 # 
-# Script to plot heatmap of relstive reduction in incidence across different
-# levels of mask wearing and mask efficacy.  
+# Script to plot timeseries of various measures of hospitalisations from CoMo output.  
 
 require(ggplot2)
 
