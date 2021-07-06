@@ -29,6 +29,15 @@ plotting_vars <- c(
     "baseline_icu_bed_requirement_med", 
     "baseline_icu_ventilator_requirement_med")
 
+hlines <- list(
+    "baseline_normal_bed_occupancy_med" = 35152,
+    "baseline_normal_bed_requirement_med" = 35152,
+    "baseline_icu_bed_occupancy_med" = 3539,
+    "baseline_icu_ventilator_occupancy_med" = 3539,
+    "baseline_icu_bed_requirement_med" = 2218, 
+    "baseline_icu_ventilator_requirement_med" = 2218
+    )
+
 # Generate plots
 for(v in plotting_vars){
     
@@ -40,8 +49,8 @@ for(v in plotting_vars){
     p <- ggplot(df_ar, aes_string(x = "date", y = v)) + 
         geom_line(color = "#0072B2") + 
         theme_bw() + 
-        geom_vline(xintercept = as.Date("2020-09-01"), color = "#D55E00", linetype = "dashed") + 
         ylab(paste0("Hospitalisations\n(", ylab, ")")) + 
+        geom_hline(yintercept = hlines[[v]], color = "#D55E00", linetype = "dashed") + 
         # scale_y_continuous(expand = c(0, 0), limits = c(2.5, 37.5), breaks = seq(5, 35, 5)) +
         xlim(c(as.Date("2020-01-01"), as.Date("2020-12-30"))) + 
         xlab("") + 
