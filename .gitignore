@@ -7,3 +7,6 @@
 *.xlsx
 *.csv
 
+venv
+como_command_line
+
