@@ -2,6 +2,7 @@
 
 *.zip
 *.png
+*.pdf
 
 # Ignore data files
 *.xlsx
