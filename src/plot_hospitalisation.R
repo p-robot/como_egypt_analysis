@@ -12,8 +12,7 @@ output_dir <- args[2] # "./results/figures/"
 # Container to store results
 output <- list(); i <- 1
 for( ar in c(10, 20, 30) ){
-    df <- read.csv(file.path(data_dir, paste0("COVID_OUTPUT_EGY_V17.2_AR", ar, ".csv")), 
-        header = TRUE)
+    df <- read.csv(file.path(data_dir, paste0("EGY_V17.2_AR", ar, ".csv")), header = TRUE)
     
     df$severity <- paste0("Proportion infected ", ar, "%")
     output[[i]] <- df; i <- i + 1
@@ -71,3 +70,4 @@ for(v in plotting_vars){
     # Save plot to disk
     ggsave(file.path(output_dir, paste0(v, ".png")), p, width = 12, height = 4)
 }
+

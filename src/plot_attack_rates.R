@@ -8,29 +8,21 @@ require(ggplot2)
 args <- commandArgs(trailingOnly = TRUE)
 
 data_dir <- args[1] # "./data/output/"
-output_dir <- args[2] # "./results/figures/"
+output_file <- args[2] # "./results/figures/"
 
 # Container to store results
 output <- list(); i <- 1
 for( ar in c(10, 20, 30) ){
-    df <- read.csv(file.path(data_dir, paste0("AR", ar, "_Base_Case.csv")), header = TRUE)
+    df <- read.csv(file.path(data_dir, paste0("EGY_V17.2_AR", ar, ".csv")), header = TRUE)
     df$severity <- paste0("Proportion infected ", ar, "%")
     
-    df$predicted <- df[["Predicted.Reported...Unreported"]]
-    
-    
-    if( ar == 10 ){
-        df$date <- as.Date(df$DateTime, "%m/%d/%Y %H:%M")
-    }else{
-        df$date <- as.Date(df$DateTime, "%Y-%m-%d %H:%M:%S")
-    }
+    df$date <- as.Date(df$date)
     output[[i]] <- df; i <- i + 1
 }
 df_ar <- do.call(rbind, output)
 
-
 # Generate plot
-p <- ggplot(df_ar, aes(x = date, y = predicted/1000)) + 
+p <- ggplot(df_ar, aes(x = date, y = baseline_predicted_reported_and_unreported_med/1000)) + 
     geom_line(color = "#0072B2") + 
     theme_bw() + 
     geom_vline(xintercept = as.Date("2020-09-01"), color = "#D55E00", linetype = "dashed") + 
@@ -53,4 +45,5 @@ p <- ggplot(df_ar, aes(x = date, y = predicted/1000)) +
         ) + theme(panel.spacing = unit(1, "lines"))
 
 # Save plot to disk
-ggsave(file.path(output_dir, "attack_rate.png"), p, width = 12, height = 4)
+ggsave(output_file, p, width = 12, height = 4)
+

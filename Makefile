@@ -39,14 +39,39 @@ consolidate_output:
 		"2020-12-31" \
 		102416974
 
+# Plot daily cases through time (figure 1)
+plot_daily_cases:
+	Rscript src/plot_attack_rates.R \
+		"data/output" \
+		"results/figures/daily_cases.png"
+
+plot_daily_cases_pdf:
+	Rscript src/plot_attack_rates.R \
+		"data/output" \
+		"results/figures/daily_cases.pdf"
+
 
 # Plot heatmap of RR in attack rate as function
-# of mask efficacy and coverage
-heatmap: 
+# of mask efficacy and coverage (figure 5)
+plot_heatmap: 
 	Rscript src/plot_mask_eff_cov.R \
-		"data/cleaned/mask_efficacy_coverage_ar.csv"
+		"data/cleaned/mask_efficacy_coverage_ar.csv" \
 		"results/figures/mask_efficacy_coverage.png"
-heatmap_pdf:
+plot_heatmap_pdf:
 	Rscript src/plot_mask_eff_cov.R \
-		"data/cleaned/mask_efficacy_coverage_ar.csv"
+		"data/cleaned/mask_efficacy_coverage_ar.csv" \
 		"results/figures/mask_efficacy_coverage.pdf"
+
+# Plot hospitalisations
+plot_hospitalisations:
+	Rscript src/plot_hospitalisation.R \
+		"data/output/" \
+		"results/figures/"
+
+# Generate all plots
+plot_all:
+	make plot_daily_cases
+	make plot_daily_cases_pdf
+	make plot_heatmap
+	make plot_heatmap_pdf
+	make plot_hospitalisations

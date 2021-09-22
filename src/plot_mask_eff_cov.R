@@ -22,8 +22,6 @@ df_ar <- df %>%
 	group_by(ar_baseline) %>%
 	mutate(rr_ar = 100 - 100*ar/max(ar))
 
-print(head(df))
-
 # In case you want to set zeros to be displayed as white
 #df_ar$RR_AR[df_ar$RR_AR == 0] <- NA
 
