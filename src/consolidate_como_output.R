@@ -1,10 +1,14 @@
+#!/usr/bin/env Rscript
+# 
 # Script to concatenate output from many CoMo runs into one file
-# extracting attack rate
+# extracting attack rate from cumulative cases, save to a CSV file
 
-output_dir <- "data/output"
-output_file <- "test.csv"
-date_ar <- as.Date("2020-12-31")
-population_size <-  102416974 # Taken from template
+args <- commandArgs(trailingOnly = TRUE)
+
+output_dir <- args[1] #"data/output"
+output_file <- args[2] #"test.csv"
+date_ar <- as.Date(args[3]) # "2020-12-31"
+population_size <-  as.numeric(args[4]) #102416974 # Taken from template
 
 output <- list(); i <- 1
 
@@ -12,7 +16,6 @@ for(AR in c(10, 20, 30)){
 
 	files <- list.files(file.path(output_dir, paste0("AR", AR)))
 	files <- files[grepl(".csv", files)]
-	print(files)
 
     for(f in files){
 	    df <- read.csv(file.path(output_dir, paste0("AR", AR), f))
@@ -23,7 +26,6 @@ for(AR in c(10, 20, 30)){
             efficacy <- gsub("ME", "", unlist(strsplit(unlist(strsplit(f, ".csv")), "_"))[4])
 	    coverage <- gsub("MC", "", unlist(strsplit(unlist(strsplit(f, ".csv")), "_"))[5])
 	    df_sub <- subset(df, date == date_ar)
-	    print(df_sub)
 	    attack_rate <- 100*df_sub$cum_cases/population_size
 	    
 	    output[[i]] <- c(as.numeric(efficacy), as.numeric(coverage), AR, attack_rate, f)
@@ -34,8 +36,7 @@ for(AR in c(10, 20, 30)){
 # Concatenate all output into one file
 df_all <- data.frame(do.call(rbind, output))
 names(df_all) <- c("efficacy", "coverage", "ar_baseline", "ar", "filename")
-print(head(df_all))
 
 # Save to file
-write.csv(df_all, output_file, row.names = FALSE)
+write.csv(df_all, output_file, row.names = FALSE, quote = FALSE)
 
