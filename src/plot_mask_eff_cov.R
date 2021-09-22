@@ -12,8 +12,8 @@ output_dir <- args[2] # "./results/figures/"
 
 # Container to store results
 output <- list(); i <- 1
-for( ar in c(11, 30, 20) ){
-    df <- read.csv(file.path(data_dir, paste0("mask wearing cov eff AR", ar, ".csv")), 
+for( ar in c(10, 30, 20) ){
+    df <- read.csv(file.path(data_dir, paste0("mask wearing cov eff ", ar, ".csv")), 
         header = TRUE)
     df$severity <- paste0("Proportion infected ", ar, "%")
     df$RR_AR <- 100 - 100*with(df, AR/max(AR))
@@ -32,8 +32,8 @@ p <- ggplot(df_ar, aes(x = Coverage, y = Efficacy, fill = RR_AR)) +
     xlab("Mask coverage (%)") + 
     ylab("Mask efficacy (%)") + 
     scale_fill_distiller(name = "Reduction\nin cases (%)", 
-        palette = "Reds", limits = c(0, 50), direction = 1,# YlOrRd
-        breaks = seq(0, 50, by = 10), na.value = "white") + 
+        palette = "Reds", limits = c(0, 60), direction = 1,# YlOrRd
+        breaks = seq(0, 60, by = 10), na.value = "white") + 
     scale_x_continuous(expand = c(0, 0), limits = c(-5, 105), breaks = seq(0, 100, 10)) + 
     scale_y_continuous(expand = c(0, 0), limits = c(2.5, 37.5), breaks = seq(5, 35, 5)) + 
     facet_grid(cols = vars(severity)) + 
