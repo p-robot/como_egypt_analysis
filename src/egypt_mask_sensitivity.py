@@ -24,7 +24,7 @@ param_combinations = np.array(np.meshgrid(*param_ranges)).T.reshape(-1, 2)
 
 # Adjust parameter values of interest
 basename = os.path.basename(file_path)
-basename = os.path.basename(file_path.split(".")[0])
+basename = os.path.basename(file_path.split(".xls")[0])
 dirname = os.path.dirname(file_path)
 extension = file_path.split(".")[-1]
 
@@ -40,8 +40,8 @@ for i, p in enumerate(param_combinations):
     # Make a copy of the whole excel file
     copy2(file_path, new_file_path)
     
-    # Load the new workbook
-    wb = openpyxl.load_workbook(new_file_path, keep_vba = True, data_only = True)
+    # Load the new workbook (needed keep_vba = False for V17)
+    wb = openpyxl.load_workbook(new_file_path, keep_vba = False, data_only = True)
     
     # Adjust "mask efficacy" in the "Interventions Param" sheet
     wb["Interventions Param"]["C17"] = int(p[0])
