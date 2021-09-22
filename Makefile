@@ -29,7 +29,14 @@ create_templates:
 	done
 
 run_templates:
-	for AR in 10 20 30 ; do \
-		mkdir -p data/input/AR$$AR; \
-		Rscript como_command_line/
+	./run_como.sh
+
+# Consolidate all output into a single file
+consolidate_output:
+	Rscript src/consolidate_como_output.R \
+		"data/output" \
+		"data/cleaned/mask_efficacy_coverage_ar.csv" \
+		"2020-12-31" \
+		102416974
+
 
