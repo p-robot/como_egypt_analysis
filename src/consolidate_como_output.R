@@ -16,6 +16,7 @@ for(AR in c(10, 20, 30)){
 
     for(f in files){
 	    df <- read.csv(file.path(output_dir, paste0("AR", AR), f))
+	    df$cum_cases <- cumsum(df$baseline_predicted_reported_and_unreported_med)
 	    
 	    df$date <- as.Date(df$date)
 	    
@@ -23,7 +24,7 @@ for(AR in c(10, 20, 30)){
 	    coverage <- gsub("MC", "", unlist(strsplit(unlist(strsplit(f, ".csv")), "_"))[5])
 	    df_sub <- subset(df, date == date_ar)
 	    print(df_sub)
-	    attack_rate <- 100*df_sub$baseline_predicted_reported_and_unreported_med/population_size
+	    attack_rate <- 100*df_sub$cum_cases/population_size
 	    
 	    output[[i]] <- c(as.numeric(efficacy), as.numeric(coverage), AR, attack_rate, f)
             i <- i + 1
