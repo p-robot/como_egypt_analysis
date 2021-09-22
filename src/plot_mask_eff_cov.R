@@ -4,29 +4,31 @@
 # levels of mask wearing and mask efficacy.  
 
 require(ggplot2)
+require(tidyverse)
 
 args <- commandArgs(trailingOnly = TRUE)
 
-data_dir <- args[1] # "./data/output/"
-output_dir <- args[2] # "./results/figures/"
+input_file <- args[1] # data/cleaned/mask_efficacy_coverage_ar.csv
+output_file <- args[2] # "./results/figures/"
 
 # Container to store results
-output <- list(); i <- 1
-for( ar in c(10, 30, 20) ){
-    df <- read.csv(file.path(data_dir, paste0("mask wearing cov eff ", ar, ".csv")), 
-        header = TRUE)
-    df$severity <- paste0("Proportion infected ", ar, "%")
-    df$RR_AR <- 100 - 100*with(df, AR/max(AR))
+df <- read.csv(input_file, header = TRUE)
 
-    output[[i]] <- df; i <- i + 1
-}
-df_ar <- do.call(rbind, output)
+# Add label for nice plotting
+df$severity <- paste0("Proportion infected ", df$ar_baseline, "%")
+
+# Calculate relative reduction in attack rate (for each baseline)
+df_ar <- df %>% 
+	group_by(ar_baseline) %>%
+	mutate(rr_ar = 100 - 100*ar/max(ar))
+
+print(head(df))
 
 # In case you want to set zeros to be displayed as white
 #df_ar$RR_AR[df_ar$RR_AR == 0] <- NA
 
 # Generate plot
-p <- ggplot(df_ar, aes(x = Coverage, y = Efficacy, fill = RR_AR)) + 
+p <- ggplot(df_ar, aes(x = coverage, y = efficacy, fill = rr_ar)) + 
     geom_tile() +
     theme_bw() + 
     xlab("Mask coverage (%)") + 
@@ -51,4 +53,5 @@ p <- ggplot(df_ar, aes(x = Coverage, y = Efficacy, fill = RR_AR)) +
         ) + theme(panel.spacing = unit(1, "lines"))
 
 # Save plot to disk
-ggsave(file.path(output_dir, "mask_efficacy_coverage.png"), p, width = 12, height = 4)
+ggsave(output_file, p, width = 12, height = 4)
+

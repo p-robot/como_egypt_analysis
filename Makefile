@@ -40,3 +40,13 @@ consolidate_output:
 		102416974
 
 
+# Plot heatmap of RR in attack rate as function
+# of mask efficacy and coverage
+heatmap: 
+	Rscript src/plot_mask_eff_cov.R \
+		"data/cleaned/mask_efficacy_coverage_ar.csv"
+		"results/figures/mask_efficacy_coverage.png"
+heatmap_pdf:
+	Rscript src/plot_mask_eff_cov.R \
+		"data/cleaned/mask_efficacy_coverage_ar.csv"
+		"results/figures/mask_efficacy_coverage.pdf"
