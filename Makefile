@@ -1,5 +1,6 @@
 .PHONY: install clean create_templates
 
+SHELL := /bin/bash
 BIN=venv/bin/
 
 # Setup script for running CoMo model
@@ -26,3 +27,9 @@ create_templates:
 			"data/input/EGY_V17.2_AR$$AR.xlsx" \
 			"data/input/AR$$AR/"; \
 	done
+
+run_templates:
+	for AR in 10 20 30 ; do \
+		mkdir -p data/input/AR$$AR; \
+		Rscript como_command_line/
+
