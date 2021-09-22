@@ -18,9 +18,6 @@ data/output/mask wearing cov eff AR11.csv
 Usage
 -----
 
-* Most figures are generated using the script `run.sh`.  
-* Figure 5 can be generated in the following manner: 
+* Most figures are generated using the Makefile.  
 
-```bash
-Rscript src/plot_mask_eff_cov.R "data/output" "results/figures"
-```
+
